@@ -4,4 +4,5 @@
     <string name="add_invoice">Add Invoice</string>
     <string name="edit_expense">Edit Expense</string>
     <string name="edit_invoice">Edit Invoice</string>
+    <string name="tax_invoice">Tax Invoice</string>
 </resources>
