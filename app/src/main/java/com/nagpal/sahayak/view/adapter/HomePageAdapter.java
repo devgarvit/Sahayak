@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.nagpal.sahayak.R;
 import com.nagpal.sahayak.view.ui.ExpenseActivity;
+import com.nagpal.sahayak.view.ui.InvoiceActivity;
 
 public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.ViewHolder> {
     private String[] gridList;
@@ -44,8 +45,10 @@ public class HomePageAdapter extends RecyclerView.Adapter<HomePageAdapter.ViewHo
 //                    activity.startActivity(new Intent(activity, InvoiceActivity.class));
 //                }
 
-                if (gridList[i].equalsIgnoreCase("Add Expense"))
+                if (gridList[i].equalsIgnoreCase(activity.getString(R.string.add_expense)))
                     activity.startActivity(new Intent(activity, ExpenseActivity.class));
+                else if (gridList[i].equalsIgnoreCase(activity.getString(R.string.add_invoice)))
+                    activity.startActivity(new Intent(activity, InvoiceActivity.class));
                 else
                     Toast.makeText(activity.getApplicationContext(), "Coming Soon!!", Toast.LENGTH_LONG).show();
 

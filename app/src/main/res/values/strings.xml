@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Sahayak</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="add_invoice">Add Invoice</string>
+    <string name="edit_expense">Edit Expense</string>
+    <string name="edit_invoice">Edit Invoice</string>
 </resources>

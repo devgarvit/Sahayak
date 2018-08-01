@@ -9,17 +9,18 @@ import com.nagpal.sahayak.R;
 import com.nagpal.sahayak.view.adapter.HomePageAdapter;
 
 public class HomePageActivity extends AppCompatActivity {
-    private final String gridItems[] = {
-            "Add Expense",
-            "Add Invoice",
-            "Edit Expense",
-            "Edit Invoice",
-    };
+    private String gridItems[] = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        gridItems = new String[]{getString(R.string.add_expense),
+                getString(R.string.add_invoice),
+                getString(R.string.edit_expense),
+                getString(R.string.edit_invoice)};
+
         initViews();
     }
 
