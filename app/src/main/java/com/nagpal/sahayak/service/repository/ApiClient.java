@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public abstract class ApiClient {
 
-    public String BASE_URL = "https://mobile-api-app.herokuapp.com/";
+    public String BASE_URL = "https://selfca.herokuapp.com/";//https://mobile-api-app.herokuapp.com/";
 
     protected ApiInterface getApiInterface() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

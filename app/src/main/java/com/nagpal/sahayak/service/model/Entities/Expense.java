@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Expense {
+    @SerializedName("index")
+    @Expose
+    private long index;
     @SerializedName("party_name")
     @Expose
     private String partyName;
@@ -58,5 +61,13 @@ public class Expense {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public long getIndex() {
+        return index;
+    }
+
+    public void setIndex(long index) {
+        this.index = index;
     }
 }
