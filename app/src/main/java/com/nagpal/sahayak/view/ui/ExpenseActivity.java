@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatSpinner;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -25,10 +26,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.nagpal.sahayak.R;
 import com.nagpal.sahayak.service.model.Callbacks.ExpenseCategoryInfo;
 import com.nagpal.sahayak.service.model.Callbacks.ExpenseDetailsInfo;
 import com.nagpal.sahayak.service.model.Entities.Category;
+import com.nagpal.sahayak.service.model.Entities.Expense;
 import com.nagpal.sahayak.service.model.Entities.ExpenseRequest;
 import com.nagpal.sahayak.service.model.Events.EventExpenseCategoryResponse;
 import com.nagpal.sahayak.service.model.Events.EventExpenseDetailsResponse;
@@ -57,12 +61,16 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
     private static final int GALLERY_REQUEST = 901;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
     private static final int MY_GALLERY_PERMISSION_CODE = 101;
+    private Expense expense = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
+        if (getIntent().hasExtra("expense")) {
+            expense = (Expense) getIntent().getSerializableExtra("expense");
+        }
         chkBoxBank = (AppCompatCheckBox) findViewById(R.id.checkbox_bank);
         chkBoxCash = (AppCompatCheckBox) findViewById(R.id.checkbox_cash);
         chkBoxCredit = (AppCompatCheckBox) findViewById(R.id.checkbox_credit);
@@ -93,8 +101,42 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         if (event != null && event.getLoginInfo() != null) {
             categoryList = event.getLoginInfo().getData().getCategories();
             setViews(event.getLoginInfo().getData().getCategories());
+            if (expense != null) {
+                setExpenseData();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Something went wrong. Please reach us on sahayak1010@gmail.com", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void setExpenseData() {
+        if (!TextUtils.isEmpty(expense.getPartyName())) {
+            editPartyName.setText(expense.getPartyName());
+        }
+        if (expense.getPaymentType().equalsIgnoreCase("credit")) {
+            chkBoxCredit.setChecked(true);
+            editCredit.setVisibility(View.VISIBLE);
+            editCredit.setText(expense.getAmount());
+        } else if (expense.getPaymentType().equalsIgnoreCase("cash")) {
+            chkBoxCash.setChecked(true);
+            editCash.setVisibility(View.VISIBLE);
+            editCash.setText(expense.getAmount());
+        } else if (expense.getPaymentType().equalsIgnoreCase("bank")) {
+            chkBoxBank.setChecked(true);
+            editBank.setVisibility(View.VISIBLE);
+            editBank.setText(expense.getAmount());
+        }
+        if (!TextUtils.isEmpty(expense.getImageUrl())) {
+            Glide.with(this).load(expense.getImageUrl())
+                    .apply(new RequestOptions().placeholder(R.drawable.icon_upload_file))
+                    .into(imageOne);
+        }
+        if (!TextUtils.isEmpty(expense.getCategory())) {
+            for (int i = 0; i < categoryList.size(); i++) {
+                if (categoryList.get(i).getName().equalsIgnoreCase(expense.getCategory())) {
+                    spinnerCategory.setSelection(i);
+                }
+            }
         }
     }
 
@@ -191,7 +233,7 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
             amount = editBank.getText().toString();
         }
 
-        if (amount.equalsIgnoreCase("0")) {
+        if (!TextUtils.isEmpty(amount) && amount.equalsIgnoreCase("0")) {
             Toast.makeText(getApplicationContext(), "All field can't be empty!!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -201,6 +243,8 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         if (photo != null)
             expenseRequest.setImageUrl("data:image/gif;base64," + toBase64(photo));
         expenseRequest.setPartyName(editPartyName.getText().toString());
+        if (expense != null && expense.getId() > 0)
+            expenseRequest.setParentId(expense.getId());
 //        expenseRequest.setUserId(1);
 
         new ApiManager().setExpenseDetails(new TinyDB(getApplicationContext()).getString("access_token"), expenseRequest, new ExpenseDetailsInfo());

@@ -3,10 +3,18 @@ package com.nagpal.sahayak.service.model.Entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Expense {
+import java.io.Serializable;
+
+public class Expense implements Serializable{
     @SerializedName("index")
     @Expose
     private long index;
+    @SerializedName("parent_id")
+    @Expose
+    private long parentId;
+    @SerializedName("id")
+    @Expose
+    private long id;
     @SerializedName("party_name")
     @Expose
     private String partyName;
@@ -69,5 +77,21 @@ public class Expense {
 
     public void setIndex(long index) {
         this.index = index;
+    }
+
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

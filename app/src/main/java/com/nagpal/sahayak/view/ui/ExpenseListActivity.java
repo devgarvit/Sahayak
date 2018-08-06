@@ -5,13 +5,17 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.nagpal.sahayak.R;
 import com.nagpal.sahayak.databinding.ActivityExpenseListBinding;
 import com.nagpal.sahayak.service.model.Callbacks.ExpenseDetailsInfo;
 import com.nagpal.sahayak.service.model.Callbacks.ExpenseListInfo;
+import com.nagpal.sahayak.service.model.Entities.Expense;
+import com.nagpal.sahayak.service.model.Entities.ExpenseList;
 import com.nagpal.sahayak.service.model.Entities.ExpenseRequest;
 import com.nagpal.sahayak.service.model.Events.EventExpenseDetailsResponse;
 import com.nagpal.sahayak.service.model.Events.EventExpenseListResponse;
@@ -21,6 +25,8 @@ import com.nagpal.sahayak.view.adapter.ExpenseRecyclerViewAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class ExpenseListActivity extends AppCompatActivity {
 
@@ -58,15 +64,23 @@ public class ExpenseListActivity extends AppCompatActivity {
     private void initRecyclerView() {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         binding.recyclerView.setHasFixedSize(true);
-        adapter = new ExpenseRecyclerViewAdapter(context);
-        binding.recyclerView.setAdapter(adapter);
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);
+        binding.recyclerView.addItemDecoration(itemDecoration);
     }
 
     @Subscribe
     public void onEvent(EventExpenseListResponse event) {
         this.asyncDialog.dismiss();
         if (event != null && event.getInfo() != null) {
-            Toast.makeText(getApplicationContext(), "Got Data Successfully!!", Toast.LENGTH_LONG).show();
+            ExpenseList expenseList = event.getInfo();
+            if (expenseList != null && expenseList.getData() != null && expenseList.getData().getExpense() != null
+                    && expenseList.getData().getExpense().size() > 0) {
+                adapter = new ExpenseRecyclerViewAdapter(context, expenseList.getData().getExpense());
+                binding.recyclerView.setAdapter(adapter);
+            } else {
+                Toast.makeText(getApplicationContext(), "No expenses available", Toast.LENGTH_LONG).show();
+            }
         } else {
             Toast.makeText(getApplicationContext(), "Something went wrong. Please reach us on sahayak1010@gmail.com", Toast.LENGTH_LONG).show();
         }

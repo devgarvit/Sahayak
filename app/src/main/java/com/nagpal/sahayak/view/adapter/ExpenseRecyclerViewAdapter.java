@@ -1,6 +1,8 @@
 package com.nagpal.sahayak.view.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,13 +12,19 @@ import android.view.ViewGroup;
 
 import com.nagpal.sahayak.R;
 import com.nagpal.sahayak.databinding.ExpenseRowItemBinding;
+import com.nagpal.sahayak.service.model.Entities.Expense;
+import com.nagpal.sahayak.view.ui.ExpenseActivity;
+
+import java.util.List;
 
 public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecyclerViewAdapter.ExpenseItemRowHolder> {
 
     private Context context;
+    private List<Expense> expenseList;
 
-    public ExpenseRecyclerViewAdapter(Context context) {
+    public ExpenseRecyclerViewAdapter(Context context, List<Expense> expenseList) {
         this.context = context;
+        this.expenseList = expenseList;
     }
 
     @NonNull
@@ -31,12 +39,25 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
 
     @Override
     public void onBindViewHolder(@NonNull ExpenseItemRowHolder holder, int position) {
-        holder.binding.tvPartyName.setText("HIIIIIIIIIIIIIIIIIII");
+        final Expense expense = expenseList.get(position);
+        holder.binding.tvPartyName.setText(expense.getPartyName());
+//        holder.binding.tvPaymentType.setText(context.getString(R.string.payment_type) + ": " +expense.getPaymentType());
+//        holder.binding.tvAmount.setText(context.getString(R.string.rupee_sign) + " " + expense.getAmount());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ExpenseActivity.class);
+                intent.putExtra("expense",expense);
+                context.startActivity(intent);
+                ((Activity)context).finish();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return expenseList != null ? expenseList.size() : 0;
     }
 
     class ExpenseItemRowHolder extends RecyclerView.ViewHolder {

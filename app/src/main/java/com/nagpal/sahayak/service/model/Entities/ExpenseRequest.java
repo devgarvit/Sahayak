@@ -27,6 +27,9 @@ public class ExpenseRequest {
     @SerializedName("category_id")
     @Expose
     private Integer categoryId;
+    @SerializedName("parent_id")
+    @Expose
+    private long parentId = -1;
 
 
     public Double getAmount() {
@@ -77,4 +80,11 @@ public class ExpenseRequest {
         this.imageUrl = imageUrl;
     }
 
+    public long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
 }
