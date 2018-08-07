@@ -238,7 +238,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
                                 android:background="@drawable/edittext_rectangle"
-                                android:hint="Optional"
                                 android:paddingLeft="2dp"
                                 android:textSize="20dp" />
 

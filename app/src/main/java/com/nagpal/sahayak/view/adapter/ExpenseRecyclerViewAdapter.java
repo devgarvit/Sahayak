@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,12 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
     @Override
     public void onBindViewHolder(@NonNull ExpenseItemRowHolder holder, int position) {
         final Expense expense = expenseList.get(position);
-        holder.binding.tvPartyName.setText(expense.getPartyName());
+        if(expense.getPaymentType().equalsIgnoreCase("cash") &&
+                TextUtils.isEmpty(expense.getPartyName())){
+            holder.binding.tvPartyName.setText("Cash");
+        }else {
+            holder.binding.tvPartyName.setText(expense.getPartyName());
+        }
 //        holder.binding.tvPaymentType.setText(context.getString(R.string.payment_type) + ": " +expense.getPaymentType());
 //        holder.binding.tvAmount.setText(context.getString(R.string.rupee_sign) + " " + expense.getAmount());
 
@@ -50,7 +56,6 @@ public class ExpenseRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseRecy
                 Intent intent = new Intent(context, ExpenseActivity.class);
                 intent.putExtra("expense",expense);
                 context.startActivity(intent);
-                ((Activity)context).finish();
             }
         });
     }

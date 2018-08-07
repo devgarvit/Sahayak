@@ -225,16 +225,24 @@ public class ExpenseActivity extends AppCompatActivity implements View.OnClickLi
         if (chkBoxCredit.isChecked()) {
             expenseRequest.setPaymentType("credit");
             amount = editCredit.getText().toString();
+            if(editPartyName.length() <= 0){
+                Toast.makeText(this,"Enter Party Name",Toast.LENGTH_SHORT).show();
+                return;
+            }
         } else if (chkBoxCash.isChecked()) {
             expenseRequest.setPaymentType("cash");
             amount = editCash.getText().toString();
         } else if (chkBoxBank.isChecked()) {
             expenseRequest.setPaymentType("bank");
             amount = editBank.getText().toString();
+            if(editPartyName.length() <= 0){
+                Toast.makeText(this,"Enter Party Name",Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
 
-        if (!TextUtils.isEmpty(amount) && amount.equalsIgnoreCase("0")) {
-            Toast.makeText(getApplicationContext(), "All field can't be empty!!", Toast.LENGTH_LONG).show();
+        if (TextUtils.isEmpty(amount) || amount.equalsIgnoreCase("0")) {
+            Toast.makeText(getApplicationContext(), "Amount can't be empty!!", Toast.LENGTH_LONG).show();
             return;
         }
 

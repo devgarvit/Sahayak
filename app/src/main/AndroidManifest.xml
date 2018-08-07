@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.ui.HomePageActivity" />
-        <activity android:name=".view.ui.ExpenseActivity" />
+        <activity android:name=".view.ui.ExpenseActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".view.ui.InvoiceActivity" />
         <activity android:name=".view.ui.LoginActivity" />
         <activity android:name=".view.ui.ExpenseListActivity"></activity>

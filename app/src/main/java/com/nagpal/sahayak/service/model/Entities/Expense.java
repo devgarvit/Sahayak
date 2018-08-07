@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Expense implements Serializable{
+public class Expense implements Serializable {
     @SerializedName("index")
     @Expose
     private long index;
@@ -30,6 +30,12 @@ public class Expense implements Serializable{
     @SerializedName("category")
     @Expose
     private String category;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+    @SerializedName("category_id")
+    @Expose
+    private long categoryId;
 
     public String getPartyName() {
         return partyName;
@@ -93,5 +99,21 @@ public class Expense implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
     }
 }
